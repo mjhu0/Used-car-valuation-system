@@ -1,0 +1,95 @@
+create database car_valuation;
+use car_valuation;
+
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS owners (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    id_number VARCHAR(255) NOT NULL,
+    phone VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL
+);
+
+
+CREATE TABLE IF NOT EXISTS vehicles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    owner_id INT,
+    brand VARCHAR(255) NOT NULL,
+    series VARCHAR(255) NOT NULL,
+    model VARCHAR(255) NOT NULL,
+    seat_count INT,
+    displacement FLOAT,
+    tonnage FLOAT,
+    manufacture_date DATE,
+    registration_date DATE,
+    plate_number VARCHAR(255) NOT NULL,
+    engine_number VARCHAR(255),
+    chassis_number VARCHAR(255),
+    usage_type VARCHAR(255),
+    mileage INT,
+    FOREIGN KEY (owner_id) REFERENCES owners(id)
+);
+
+
+
+CREATE TABLE IF NOT EXISTS valuations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    vehicle_id INT,
+    valuation_date DATE,
+    valuation_type VARCHAR(255),
+    estimated_price FLOAT,
+    FOREIGN KEY (vehicle_id) REFERENCES vehicles(id)
+);
+
+
+
+-- 插入用户
+INSERT INTO users (username, password) VALUES ('testuser', 'testpassword');
+
+-- 插入车主信息
+INSERT INTO owners (name, id_number, phone, address) VALUES ('John Doe', '123456789', '555-1234', '123 Main St');
+
+-- 插入车辆信息
+INSERT INTO vehicles (owner_id, brand, series, model, seat_count, displacement, tonnage, manufacture_date, registration_date, plate_number, engine_number, chassis_number, usage_type, mileage)
+VALUES (1, 'Toyota', 'Camry', 'LE', 5, 2.5, 1.5, '2015-05-20', '2015-06-15', 'ABC123', 'ENG123', 'CHS123', 'Personal', 60000);
+
+-- 插入估价记录
+INSERT INTO valuations (vehicle_id, valuation_date, valuation_type, estimated_price)
+VALUES (1, '2023-06-01', 'Quick', 8.5);
+
+CREATE TABLE IF NOT EXISTS additional_info (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    owner_id INT,
+    trustee VARCHAR(255) NOT NULL,
+    trustee_id VARCHAR(255) NOT NULL,
+    trustee_date DATE NOT NULL,
+    handler VARCHAR(255) NOT NULL,
+    handler_id VARCHAR(255) NOT NULL,
+    handler_phone VARCHAR(255) NOT NULL,
+    handler_address VARCHAR(255) NOT NULL,
+    FOREIGN KEY (owner_id) REFERENCES owners(id)
+);
+
+
+drop table additional_info;
+
+
+CREATE TABLE IF NOT EXISTS car_owners (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    id_number VARCHAR(255) NOT NULL,
+    phone VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    trustee VARCHAR(255) NOT NULL,
+    trustee_id VARCHAR(255) NOT NULL,
+    trustee_date DATE,
+    handler VARCHAR(255) NOT NULL,
+    handler_id VARCHAR(255) NOT NULL,
+    handler_phone VARCHAR(255),
+    handler_address VARCHAR(255)
+);
